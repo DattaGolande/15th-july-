@@ -1,0 +1,34 @@
+public class WindowHandler {
+	WebDriver driver;
+	@Test
+	public void verifyGolinkClickwithWindowHandler()  {
+		System.setProperty("webdriver.chrome.driver", "driver1/chromedriver.exe");
+		 driver = new ChromeDriver();
+		driver.get("file:///C:/Admin/Offline%20website/Offline%20website/pages/examples/links.html");
+		driver.manage().window().maximize();
+		
+		String mainWindow=driver.getWindowHandle();
+		System.out.println(mainWindow);
+		List<WebElement> listOfGoLink=driver.findElements(By.xpath("//span[text()='Go !']"));
+		for(WebElement goLink:listOfGoLink) {
+			System.out.println("print text of go link"+goLink.getText());
+			goLink.click();
+		}
+		Set<String> set=driver.getWindowHandles();
+		Iterator<String> itr=set.iterator();
+		while(itr.hasNext()) {
+			String childWindow=itr.next();
+			System.out.println(childWindow);
+			if(!mainWindow.equals(childWindow)) {
+				String titleOfChildWindow=driver.switchTo().window(childWindow).getTitle();
+				System.out.println("Title of child window::"+titleOfChildWindow);
+				driver.close();
+			}
+			driver.switchTo().window(mainWindow);
+	
+		}
+		
+	}
+
+
+}
